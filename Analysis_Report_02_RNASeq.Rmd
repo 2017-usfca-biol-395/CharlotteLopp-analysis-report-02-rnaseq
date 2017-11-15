@@ -1,6 +1,6 @@
 ---
 title: "Analysis Report 2: Your Title Here"
-author: "Don Francisco"
+author: "Charlotte Lopp"
 date: "November 10, 2017"
 output: github_document
 bibliography: references.bib
@@ -18,6 +18,8 @@ Add about 1 page here. Must cite at least 5 peer reviewed articles.
 ## Sample origin and sequencing
 
 Add about half a page here. In this section instead of first person (I/we), use Li et al. [@li2015rna] and Seo et al. [@seo2012transcriptional], since you'll just be describing what they did, based on the methods in their paper(s). It's important to include this so the reader knows what the study design was for the data you will be presenting.
+
+  In 2012, Seo et al. conducted transcriptome analysis of lung adenocarcinoma in order to identify the somatic mutations and transcriptional variations associated with lung cancer [@seo2012transcriptional]. They collected 200 fresh surgical specimens of primary lung adenocarcinoma from Korean patients who underwent major lunch resection and recorded diagnosis, gender, cancer stage, and smoking status for each patient. Among these 200 cancer patients, 54.5% (n = 109) were females and 58.0% (n = 116) were never-smokers. Of these, 87 cancer tissues whose driver mutations were not detected by screening tests were analyzed by transcriptome sequencing combined with whole-exome (n = 76) and transcriptome (n = 77) seuqencing of matched normal lung tissue samples. Transcriptome sequencing was a powerful method to use for detecting driver mutations in cancer, since not only somatic point mutations but also aberrant RNA variants such as fusion genes and alternative splicing can be examined. All these sequencing experiments were done as described previously. They generated 14,038,673,860 paired-end 101-bp-long reads from RNA sequencing of 164 samples (87 cancer and 77 corresponding normal tissues). On average, the RNA sequencing throughputs were 9.77 and 7.38 Gbp for cancer and normal tissues, respectively. In the whole-exome sequencing of normal tissues, they obtained 32.96-fold read depth per tissue for regions targeted by the exome capture platform used in this study. Li et al. [@li2015rna] downloaded this RNA-seq data from GEO:GSE40419 for their investigation. 
 
 ## Computational
 
