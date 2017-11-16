@@ -90,20 +90,45 @@ top_15 %>%
   ggplot(aes(x = genename,
              y = mean_count,
              fill = gender)) +
-    geom_col(position = "dodge")
-```
-
-
-```{r make-point-graph}
-# this code looks at the relationship between cancer stage and smoking status
-cstage_by_sstatus <- final_table %>%
-  group_by(cancer_stage, smoking_status) %>%
-  ggplot(aes(smoking_status, cancer_stage, color = cancer_stage)) +
-      geom_point() +
-      facet_grid(. ~ cancer_stage)  
+    geom_col(position = "dodge") + 
+    xlab("Gene Name") +
+    ylab("Mean Read Counts") +
+    ggtitle("Mean Read Counts Per Gene By Gender") +
+    theme(axis.text.x = 
+            element_text(angle = 90,
+                         hjust = 1))
 ```
 
 **Figure 1**: Here we show an example figure caption.
+
+```{r make-point-graph}
+# this code looks at the relationship between cancer stage and smoking status
+final_table %>%
+  ggplot(aes(x = cancer_stage,
+             y = age_at_diagnosis)) +
+      geom_point(size = 1, aes(color = smoking_status)) + 
+      ylab("Age at Diagnosis") +
+      xlab("Stage of Cancer") + 
+      ggtitle("The Relationship Between Age at Diagnosis and 
+              Cancer Stage By Smoking Status")
+```
+
+**Figure 1**: Here we show an example figure caption.
+
+```{r make-facet-grid-of-age-by-length}
+final_table %>%
+  ggplot(aes(x = age_at_diagnosis,
+             y = counts_lengthscaledtpm)) + 
+      geom_point(size = 1, aes(color = gender)) + 
+      facet_grid(. ~ cancer_stage) + 
+      xlab("Age at Diagnosis") + 
+      ylab("Scaled Read Counts per Gene") + 
+      ggtitle("Read Counts per Gene by Age at Diagnosis
+              and Cancer Stage") + 
+      theme(axis.text.x = 
+            element_text(angle = 90,
+                         hjust = 1))
+```
 
 ```{r make-boxplot-of-highly-expressed-genes, echo = FALSE}
 # here we just want to pull out the unique gene names and turn
