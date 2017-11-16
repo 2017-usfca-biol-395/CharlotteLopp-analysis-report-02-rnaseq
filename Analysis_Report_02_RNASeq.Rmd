@@ -7,8 +7,6 @@ bibliography: references.bib
 csl: bioinformatics.csl
 ---
 
-*Overall, a single-spaced page is about 500 words. So if the guidelines say half of a page, think about writing around 250 words. You can use the wordcountaddin in RStudio to track your progress.*
-
 # Introduction
 
   In the 1950s, tobacco companies, with their ingenious advertisements promoting the idea that the quintessence of cool and glamour was or was at least very closely linked to cigarette smoking, started a trend that would change lives for decades. Hollywood icons, screen beauties, and even presidents were smoking and by the late 1950s around half of the population of industrialized nations smoked. The tobacco industry seemed untouchable and unstoppable but it all changed in 1994 when Diane Castano, whose husband died of lung cancer, sued the tobacco industry in the largest potential class action suit in history. Ever since, efforts have been made to expose not only the individual dangers of smoking but also the consequential dangers suffered by those who didn't decide to smoke - secondhand smoking, a concept championed by California politicians. Passive or indirect smoking may be one of the causal factors for lung cancer; it would explain the long-standing riddle of why many women (whose husbands were heavy smokers) develop lung cancer even though they themselves are non-smokers [@hirayama2000non]. 
@@ -21,7 +19,8 @@ csl: bioinformatics.csl
 
 ## Sample origin and sequencing
 
-  In 2012, Seo et al. conducted transcriptome analysis of lung adenocarcinoma in order to identify the somatic mutations and transcriptional variations associated with lung cancer [@seo2012transcriptional]. They collected 200 fresh surgical specimens of primary lung adenocarcinoma from Korean patients who underwent major lunch resection and recorded diagnosis, gender, cancer stage, and smoking status for each patient. Among these 200 cancer patients, 54.5% (n = 109) were females and 58.0% (n = 116) were never-smokers. Of these, 87 cancer tissues whose driver mutations were not detected by screening tests were analyzed by transcriptome sequencing combined with whole-exome (n = 76) and transcriptome (n = 77) seuqencing of matched normal lung tissue samples. Transcriptome sequencing was a powerful method to use for detecting driver mutations in cancer, since not only somatic point mutations but also aberrant RNA variants such as fusion genes and alternative splicing can be examined. All these sequencing experiments were done as described previously. They generated 14,038,673,860 paired-end 101-bp-long reads from RNA sequencing of 164 samples (87 cancer and 77 corresponding normal tissues). On average, the RNA sequencing throughputs were 9.77 and 7.38 Gbp for cancer and normal tissues, respectively. In the whole-exome sequencing of normal tissues, they obtained 32.96-fold read depth per tissue for regions targeted by the exome capture platform used in this study.  
+  In 2012, Seo et al. conducted transcriptome analysis of lung adenocarcinoma in order to identify the somatic mutations and transcriptional variations associated with lung cancer [@seo2012transcriptional]. They collected 200 fresh surgical specimens of primary lung adenocarcinoma from Korean patients who underwent major lunch resection and recorded diagnosis, gender, cancer stage, and smoking status for each patient. Among these 200 cancer patients, 54.5% (n = 109) were females and 58.0% (n = 116) were never-smokers. Of these, 87 cancer tissues whose driver mutations were not detected by screening tests were analyzed by transcriptome sequencing combined with whole-exome (n = 76) and transcriptome (n = 77) seuqencing of matched normal lung tissue samples. Transcriptome sequencing was a powerful method to use for detecting driver mutations in cancer, since not only somatic point mutations but also aberrant RNA variants such as fusion genes and alternative splicing can be examined. All these sequencing experiments were done as described previously. They generated 14,038,673,860 paired-end 101-bp-long reads from RNA sequencing of 164 samples (87 cancer and 77 corresponding normal tissues). On average, the RNA sequencing throughputs were 9.77 and 7.38 Gbp for cancer and normal tissues, respectively. In the whole-exome sequencing of normal tissues, they obtained 32.96-fold read depth per tissue for regions targeted by the exome capture platform used in this study. 
+  
   Li et al. [@li2015rna] downloaded Seo et al.'s RNA-seq data from paired normal and tumor tissues from 34 nonsmoking and 34 smoking patients with lung adenocarcinoma (GEO:GSE40419). They aimed to perform a large scale transcriptome analysis and identify the genes with altered expression in lung cancer development. They also looked for differences in gene expression profiles between smoking and nonsmoking patients in order to better define the impact of smoking in lung cancer development and provide insights that might better individualize treatment strategies for the patients.  
 
 ## Computational
@@ -92,6 +91,16 @@ top_15 %>%
              y = mean_count,
              fill = gender)) +
     geom_col(position = "dodge")
+```
+
+
+```{r make-point-graph}
+# this code looks at the relationship between cancer stage and smoking status
+cstage_by_sstatus <- final_table %>%
+  group_by(cancer_stage, smoking_status) %>%
+  ggplot(aes(smoking_status, cancer_stage, color = cancer_stage)) +
+      geom_point() +
+      facet_grid(. ~ cancer_stage)  
 ```
 
 **Figure 1**: Here we show an example figure caption.
