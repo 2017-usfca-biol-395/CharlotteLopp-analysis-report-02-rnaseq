@@ -108,9 +108,9 @@ final_table %>%
              y = age_at_diagnosis)) +
       geom_point(size = 1, aes(color = smoking_status)) + 
       ylab("Age at Diagnosis") +
-      xlab("Stage of Cancer") + 
+      xlab("Cancer Stage") + 
       ggtitle("The Relationship Between Age at Diagnosis and 
-              Cancer Stage By Smoking Status")
+              Cancer Stage by Smoking Status")
 ```
 
 **Figure 1**: Here we show an example figure caption.
@@ -122,13 +122,35 @@ final_table %>%
       geom_point(size = 1, aes(color = gender)) + 
       facet_grid(. ~ cancer_stage) + 
       xlab("Age at Diagnosis") + 
-      ylab("Scaled Read Counts per Gene") + 
-      ggtitle("Read Counts per Gene by Age at Diagnosis
-              and Cancer Stage") + 
+      ylab("Scaled Read Counts") + 
+      ggtitle("Read Counts by Age at Diagnosis and Cancer 
+              Stage by Gender") + 
       theme(axis.text.x = 
             element_text(angle = 90,
                          hjust = 1))
 ```
+
+**Figure 1**: Here we show an example figure caption.
+
+```{r box-plot-of-gender-by-read-count}
+final_table %>%
+  group_by(cancer_stage) %>%
+  summarize(mean_read_count = mean(counts_lengthscaledtpm),
+            sd_read_count = sd(counts_lengthscaledtpm)) %>%
+  ggplot(aes(x = cancer_stage,
+             y = mean_read_count,
+             color = cancer_stage)) +
+      geom_errorbar(aes(ymin = mean_read_count - sd_read_count,
+                        ymax = mean_read_count + sd_read_count),
+                    width = 0.25) +
+      geom_point(aes(y = mean_read_count)) +
+      ylab("Mean Read Count") + 
+      xlab("Cancer Stage") +
+      ggtitle("Mean and Standard Deviation of Read Count
+              by Cancer Stage")
+```
+
+**Figure 1**: Here we show an example figure caption.
 
 ```{r make-boxplot-of-highly-expressed-genes, echo = FALSE}
 # here we just want to pull out the unique gene names and turn
