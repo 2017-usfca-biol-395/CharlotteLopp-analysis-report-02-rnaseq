@@ -58,14 +58,64 @@ In addition to a minimum of 4-5 figures/tables (and associated captions), you sh
 
 ![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/make-barplot-of-highly-expressed-genes-1.png)
 
+**Figure 1**: Here we show an example figure caption.
+
 ``` r
-# this code looks at the relationship between cancer stage and smoking status
-cstage_by_sstatus <- final_table %>%
-  group_by(cancer_stage, smoking_status) %>%
-  ggplot(aes(smoking_status, cancer_stage, color = cancer_stage)) +
-      geom_point() +
-      facet_grid(. ~ cancer_stage)  
+# this code looks at the relationship among cancer stage, age of diagnosis and smoking status
+final_table %>%
+  ggplot(aes(x = cancer_stage,
+             y = age_at_diagnosis)) +
+      geom_point(size = 1, aes(color = smoking_status)) + 
+      ylab("Age at Diagnosis") +
+      xlab("Cancer Stage") + 
+      ggtitle("The Relationship Between Age at Diagnosis and 
+              Cancer Stage by Smoking Status")
 ```
+
+![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/make-point-graph-1.png)
+
+**Figure 1**: Here we show an example figure caption.
+
+``` r
+# this code looks at realtionship between age, read count, and age at diagnosis
+final_table %>%
+  ggplot(aes(x = age_at_diagnosis,
+             y = counts_lengthscaledtpm)) + 
+      geom_point(size = 1, aes(color = gender)) + 
+      facet_grid(. ~ cancer_stage) + 
+      xlab("Age at Diagnosis") + 
+      ylab("Scaled Read Counts") + 
+      ggtitle("Read Counts by Age at Diagnosis and Cancer 
+              Stage by Gender") + 
+      theme(axis.text.x = 
+            element_text(angle = 90,
+                         hjust = 1))
+```
+
+![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/make-facet-grid-of-age-by-length-1.png)
+
+**Figure 1**: Here we show an example figure caption.
+
+``` r
+# this code looks at the mean and standard deviation of read count by cancer stage
+final_table %>%
+  group_by(cancer_stage) %>%
+  summarize(mean_read_count = mean(counts_lengthscaledtpm),
+            sd_read_count = sd(counts_lengthscaledtpm)) %>%
+  ggplot(aes(x = cancer_stage,
+             y = mean_read_count,
+             color = cancer_stage)) +
+      geom_errorbar(aes(ymin = mean_read_count - sd_read_count,
+                        ymax = mean_read_count + sd_read_count),
+                    width = 0.25) +
+      geom_point(aes(y = mean_read_count)) +
+      ylab("Mean Read Count") + 
+      xlab("Cancer Stage") +
+      ggtitle("Mean and Standard Deviation of Read Count
+              by Cancer Stage")
+```
+
+![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/mean-and-sd-of-read-count-by-cancer-stage-1.png)
 
 **Figure 1**: Here we show an example figure caption.
 
