@@ -54,74 +54,31 @@ In addition to a minimum of 4-5 figures/tables (and associated captions), you sh
 | female | RNA28S5  |     58079.55|
 | male   | FTH1     |     52390.78|
 
-**Table 1**: The most highly expressed genes in both genders included *SFTPB* and *EEF1A1*.
+**Figure 1**: This table is of the means of the most highly expressed genes in this dataset. It includes which sex these genes are expressed in, their gene name, and their mean length which is arranged in descending order. The most highly expressed gene is *EEF1A1*.
 
 ![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/make-barplot-of-highly-expressed-genes-1.png)
 
-**Figure 1**: Here we show an example figure caption.
-
-``` r
-# this code looks at the relationship among cancer stage, age of diagnosis and smoking status
-final_table %>%
-  ggplot(aes(x = cancer_stage,
-             y = age_at_diagnosis)) +
-      geom_point(size = 1, aes(color = smoking_status)) + 
-      ylab("Age at Diagnosis") +
-      xlab("Cancer Stage") + 
-      ggtitle("The Relationship Between Age at Diagnosis and 
-              Cancer Stage by Smoking Status")
-```
-
-![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/make-point-graph-1.png)
-
-**Figure 1**: Here we show an example figure caption.
-
-``` r
-# this code looks at realtionship between age, read count, and age at diagnosis
-final_table %>%
-  ggplot(aes(x = age_at_diagnosis,
-             y = counts_lengthscaledtpm)) + 
-      geom_point(size = 1, aes(color = gender)) + 
-      facet_grid(. ~ cancer_stage) + 
-      xlab("Age at Diagnosis") + 
-      ylab("Scaled Read Counts") + 
-      ggtitle("Read Counts by Age at Diagnosis and Cancer 
-              Stage by Gender") + 
-      theme(axis.text.x = 
-            element_text(angle = 90,
-                         hjust = 1))
-```
-
-![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/make-facet-grid-of-age-by-length-1.png)
-
-**Figure 1**: Here we show an example figure caption.
-
-``` r
-# this code looks at the mean and standard deviation of read count by cancer stage
-final_table %>%
-  group_by(cancer_stage) %>%
-  summarize(mean_read_count = mean(counts_lengthscaledtpm),
-            sd_read_count = sd(counts_lengthscaledtpm)) %>%
-  ggplot(aes(x = cancer_stage,
-             y = mean_read_count,
-             color = cancer_stage)) +
-      geom_errorbar(aes(ymin = mean_read_count - sd_read_count,
-                        ymax = mean_read_count + sd_read_count),
-                    width = 0.25) +
-      geom_point(aes(y = mean_read_count)) +
-      ylab("Mean Read Count") + 
-      xlab("Cancer Stage") +
-      ggtitle("Mean and Standard Deviation of Read Count
-              by Cancer Stage")
-```
+**Figure 2**: Here we see mean read counts per gene by gender; its a visualization of the data presented in Figure 1. The most highly expressed gene in both genders is *EEF1A1* followed by *SFTPB*. The rest are have noticeably lower expression. For the genes FN1, FTH1, and FTL, the expression is only seen in males and not females.
 
 ![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/mean-and-sd-of-read-count-by-cancer-stage-1.png)
 
-**Figure 1**: Here we show an example figure caption.
+**Figure 3**: This figure shows the mean and standard deviation of the scaled read counts for each stage of cancer from 1A to 4. The means are all about the smae with a slight increase in value for cancer stages 2B and 3A. These two stages also have the largest standard deviation (2B with the largest and then 3A) followed by 1B, 1A and 2A are very similar, 2, and then 3B.
+
+![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/make-facet-grid-of-age-by-length-1.png)
+
+**Figure 4**: Here we show the relationship between scaled read counts and cancer stage, separated by age of diagnosis and further discriminated by gender. In the cancer stage 2B, there seems to be only males. 3A has the highest read counts of all the stages and they are all male; also, there is a clear deliniation between genders with females falling between the ages of diagnosis of 50 and 60 and men between 60 and 80. In 1A, 1B and 2A, there is more of a mixture and overlap in terms of age of diagnosis. 3B and 4 have the lowest number of people; 3B has more females and 3 seems to have more males. Most of the read counts fall below 5e+05.
+
+![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/age-by-cancer-stage-by-smoking-status-1.png)
+
+**Figure 5**: This figure shows the relationship between stage of cancer and age at diagnosis, further separated by smoking status. Here we see that anyone over 80 regardless of cancer stage is of the smoking status "previously." 3B only has people who have never smoked. 2B consists of "current" or "previously." Those who have never smoked are seen in each stage (except 2B) while those currently smoking are seen from 1A to 3A between the ages of just below 40 to just below 75. Those who have previously smoked are also seen in all age groups (and dominate the upper age groups) and are presented in each stage except 3B.
+
+![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/smoking-status-by-gender-1.png)
+
+**Figure 6**:
 
 ![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/make-boxplot-of-highly-expressed-genes-1.png)
 
-**Figure 2**: Here we show another example figure caption.
+**Figure 7**: Here we show another example figure caption.
 
 Discussion
 ==========
