@@ -1,4 +1,4 @@
-Analysis Report 2: Your Title Here
+Analysis Report 2: The Relationships Among Possible Predictors and Causalities of Lung Cancer and its Different Stages
 ================
 Charlotte Lopp
 November 10, 2017
@@ -25,12 +25,14 @@ Li et al. (Li *et al.*, 2015) downloaded Seo et al.'s RNA-seq data from paired n
 Computational
 -------------
 
-After obtaining the RNA-seq data, Li et al. applied a stringent filter on the data to remove the gene tags with sparse count data. They then used edgeR to identify the genes differently expressed between tumor and normal tissues as well as the genes that varied between nonsmoker and smoker patients. The GLM model in edgeR allowed them to identify the genes that varied between nonsmoker and smoker patients with lung adenocarcinmoa. They identified 175 genes whose expressions were statistically different between nonsmoker and smoker group. For our use of the data, biomartr (Drost and Paszkowski, 2017) was used to implement straightforward functions for bulk retrieval of all genomci data for the selected files present in databases hosted by the National Center for Biotechnology Information (NCBI) and European Bioinformatics Institute (EMBL-EBI). Trimmomatic (Bolger *et al.*, 2014) was used to handle the paired-end data as it was specifically developed to be a more flexible and efficient preprocessing tool. Sailfish (Patro *et al.*, 2014), which is a computational methd for quantifying the abundance of previously annotated RNA isoforms from RNA-seq data, was used because it provides quantification estimates much faster than other existing approaches without loss of accuracy. It exemplifies the potential of lightweight algorithms for efficiently processing sequencing reads by facilitating frequent reanalysis of data and reduicng the need to optimize parameters
+After obtaining the RNA-seq data, Li et al. applied a stringent filter on the data to remove the gene tags with sparse count data. They then used edgeR to identify the genes differently expressed between tumor and normal tissues as well as the genes that varied between nonsmoker and smoker patients. The GLM model in edgeR allowed them to identify the genes that varied between nonsmoker and smoker patients with lung adenocarcinmoa.
+
+For our use of the data, our first step was to install the necessary tools and download sequencing files for RNA-Seq analysis. Next, we used R Script to install the biomartr package (from Bioconductor) and then used it to download a reference genome, transcripts, and annotations for the human genome from NCBI RefSeq. Biomartr (Drost and Paszkowski, 2017) was used in this step because it implements straightforward functions for bulk retrieval of all genomci data for the selected files present in databases hosted by the National Center for Biotechnology Information (NCBI) and European Bioinformatics Institute (EMBL-EBI). Then a bash script was used to convert paired-end sra files to fastq files. The next step used sailfish; we created an index of kmers for sailfish quasi-aligner. Sailfish (Patro *et al.*, 2014), which is a computational methd for quantifying the abundance of previously annotated RNA isoforms from RNA-seq data, was used because it provides quantification estimates much faster than other existing approaches without loss of accuracy. It exemplifies the potential of lightweight algorithms for efficiently processing sequencing reads by facilitating frequent reanalysis of data and reduicng the need to optimize parameters. We then ran fastqc on all fastq files and saved the output to an output directory using 86 threads. Trimmomatic was used to trim paired end reads in parallel. Trimmomatic (Bolger *et al.*, 2014) is a program designed to handle paired-end data in a more flexible and efficient preprocessing way. Next was a script to run sailfish to count all reads from trimmed reads where both paired reads (F and R) made it through Trimmomatic QC. Then we needed to construct a transcript to gene ID mapping table. First was construction of a non-redundant list of Genbank ID to gene names. Second was to use grep over the first column in quant.sf files to find Genbank ID and then to add the gene name as second column. All of this gets loaded into R.
+
+The purpose of this R script is to read in all of the transcript counts made by sailfish individually on each sample, aggregate those counts (which are at the transcript level) to the gene level, normalize them based on length and read depth, and then build a table with rows as genes and columns as samples, with each cell being the normalized count for that gene in that sample. Then, we wanted to join in the two other metadata files we had, from SRA and from the supplementatry table from the original manuscript that has information like patient age and smoking behavior. We had to do some cleaning along the way, and the gathered (melted) output file was rather big so we only included interesting columns, and wrote out the output in a compressed csv format as well as binary RData format.
 
 Results
 =======
-
-In addition to a minimum of 4-5 figures/tables (and associated captions), you should include sufficient text in this section to describe what your findings were. Remember that in the results section you just describe what you found, but you don't interpret it - that happens in the discussion.
 
     ## Warning: package 'dplyr' was built under R version 3.4.2
 
@@ -54,31 +56,48 @@ In addition to a minimum of 4-5 figures/tables (and associated captions), you sh
 | female | RNA28S5  |     58079.55|
 | male   | FTH1     |     52390.78|
 
-**Figure 1**: This table is of the means of the most highly expressed genes in this dataset. It includes which sex these genes are expressed in, their gene name, and their mean length which is arranged in descending order. The most highly expressed gene is *EEF1A1*.
+**Figure 1**: This table is of the means of the most highly expressed genes in this dataset.
 
 ![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/make-barplot-of-highly-expressed-genes-1.png)
 
-**Figure 2**: Here we see mean read counts per gene by gender; its a visualization of the data presented in Figure 1. The most highly expressed gene in both genders is *EEF1A1* followed by *SFTPB*. The rest are have noticeably lower expression. For the genes FN1, FTH1, and FTL, the expression is only seen in males and not females.
+**Figure 2**: Here we see mean read counts per gene by gender; its a visualization of the data presented in Figure 1.
 
 ![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/mean-and-sd-of-read-count-by-cancer-stage-1.png)
 
-**Figure 3**: This figure shows the mean and standard deviation of the scaled read counts for each stage of cancer from 1A to 4. The means are all about the smae with a slight increase in value for cancer stages 2B and 3A. These two stages also have the largest standard deviation (2B with the largest and then 3A) followed by 1B, 1A and 2A are very similar, 2, and then 3B.
+**Figure 3**: This figure shows the mean and standard deviation of the scaled read counts for each stage of cancer from 1A to 4.
 
 ![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/make-facet-grid-of-age-by-length-1.png)
 
-**Figure 4**: Here we show the relationship between scaled read counts and cancer stage, separated by age of diagnosis and further discriminated by gender. In the cancer stage 2B, there seems to be only males. 3A has the highest read counts of all the stages and they are all male; also, there is a clear deliniation between genders with females falling between the ages of diagnosis of 50 and 60 and men between 60 and 80. In 1A, 1B and 2A, there is more of a mixture and overlap in terms of age of diagnosis. 3B and 4 have the lowest number of people; 3B has more females and 3 seems to have more males. Most of the read counts fall below 5e+05.
+**Figure 4**: Here we show the relationship between scaled read counts and cancer stage, separated by age of diagnosis and further discriminated by gender.
 
 ![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/age-by-cancer-stage-by-smoking-status-1.png)
 
-**Figure 5**: This figure shows the relationship between stage of cancer and age at diagnosis, further separated by smoking status. Here we see that anyone over 80 regardless of cancer stage is of the smoking status "previously." 3B only has people who have never smoked. 2B consists of "current" or "previously." Those who have never smoked are seen in each stage (except 2B) while those currently smoking are seen from 1A to 3A between the ages of just below 40 to just below 75. Those who have previously smoked are also seen in all age groups (and dominate the upper age groups) and are presented in each stage except 3B.
+**Figure 5**: This figure shows the relationship between stage of cancer and age at diagnosis, further separated by smoking status.
 
 ![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/smoking-status-by-gender-1.png)
 
-**Figure 6**:
+**Figure 6**: Here we see the relationship between gender and smoking status.
 
 ![](Analysis_Report_02_RNASeq_files/figure-markdown_github-ascii_identifiers/make-boxplot-of-highly-expressed-genes-1.png)
 
-**Figure 7**: Here we show another example figure caption.
+**Figure 7**: This figure shows the relationship between scaled read counts per gene separated by cancer stage and further discriminated by gender.
+
+Summary of Results
+------------------
+
+The dataset is a table that has 3,434,400 points for 12 variables so it is a lot to be dealing with. Thus, our first step was to narrow down what we were looking out by separating the genes that were most highly expressed. Figure 1 is a table that details the top 15 most highly expressed genes along with which gender they were seen expressed in and their mean scaled read count arranged in descending order. The number one, most highly expressed gene is *EEF1A1*.
+
+From this table, we created a figure (Figure 2) to visualize the data; here we see mean read counts per gene by gender. The most highly expressed gene in both genders is *EEF1A1* followed by *SFTPB*. The rest are have noticeably lower expression. For the genes FN1, FTH1, and FTL, the expression is only seen in males and not females. For each gene, except SFTPA2 and SFTPB, the level of expression is higher in males than females.
+
+For Figure 3, we are looking at the mean and standard deviation of the scaled read counts for each stage of cancer from 1A to 4.The means are all about the same with a slight increase in value for cancer stages 2B and 3A. These two stages also have the largest standard deviation (2B with the largest followed by 3A). The rest of the cancer stages have standard deviations that are significantly smaller - most of them fall between -2500 and 2500 (1B raches just above 2500). Their size in terms of standard deviation ranks in the following descending order: 2B, 3A, 1B, 1A and 2A are very similar, 2, and then 3B.
+
+For Figure 4, we see the relationship between scaled read counts and cancer stage, separated by age of diagnosis and further discriminated by gender. In the cancer stage 2B, there seems to be only males. 3A has the highest read counts of all the stages and these higher read counts are all male; also, there is a clear deliniation between genders with females falling between the ages of 50 and 60 (in terms of age of diagnosis) and men between 60 and 80. In 1A, 1B and 2A, there is more of a mixture and overlap in terms of age of diagnosis. 2A, 3B and 4 all fall beneath read counts of 2.5e+05. Most of the read counts fall below 5e+05. For those with read counts higher than 5e+05, almost all of them are males except for a few females which are seen in cancer stage 1B. Those whose cancer stage is unknown have the least variance in terms of age: they are all around the age of 60. 1A, 2A, 3A, 4 and NA show the trend that the youngest people in each of these cancer stages are females; 1B somewhat shows this but it shows some that are younger being males. Both 2B and 3B show the youngest groups being males although 2B is made up entirely of males. In 1B, 2A, 2B, 3A, 4, and NA, the oldest people are males; only in 1A are the oldest females.
+
+For Figure 5, we show the relationship between stage of cancer and age at diagnosis, further separated by smoking status. Here we see that anyone over 80 regardless of cancer stage is of the smoking status "previously." 3B only has people who have never smoked. 2B consists of "current" or "previously." Those who have never smoked are seen in each stage except for 2B from just below the age of 40 up to age 75. Those currently smoking are seen from 1A to 3A between the ages of just below 40 to just below 75. Those who have previously smoked are also seen in all age groups (and dominate the upper age groups) and are presented in each stage except 3B. Those whose smoking status is unknown are only seen in the unknown cancer stage and 3A between the ages of 60 and 70. It would seem that the overall concentration of lies within those who have either never smoked or previously smoked between the ages of 60 and 70.
+
+For Figure 6, we see the relationship between gender and smoking status. For unknown smoking status, only males are represented. For those who have previously smoked, almost all are male - just over 30 are male and about 2 or 3 are females. Around the same trend is seen for those who have never smoked but inversed; the majority is female with just over 30 being female and just under 10 being male. For those currently smoking, about 1 is female and 15 are male.
+
+For Figure 7, we see the relationship between scaled read counts per gene separated by cancer stage and further discriminated by gender. The data represented in this figure starts with the top 15 genes, from the final table, which were enumerated in Figure 1. From this table, we pulled the unique gene names and turned them into a vector which were used as our x axis values. For cancer stages of 2A, 3B, 4, and NA, you can see that very low with counts all falling beneath 250,000. 3A shows some increase with counts reaching up to 500,000. There are also barely discernable boxplots that are only male. 1A is the next increment for higher count with the highest count belonging to gene EEF1A1 at 750,000. There is also one discernable boxplot for gene SFTPB that is male. Both 1B and 2B have counts that are above 750,000: for 1B it is seen in SFTPB and for 2B it is seen in SFTPA2. Overall, 2B has more longer counts but 1B is the only one with the largest boxplots, seen in genes SFTPB, that are both male and female.
 
 Discussion
 ==========
