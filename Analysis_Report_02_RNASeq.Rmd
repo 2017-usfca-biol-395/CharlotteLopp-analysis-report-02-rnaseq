@@ -146,7 +146,7 @@ final_table %>%
 
 **Figure 4**: This figure shows the mean and standard deviation of the scaled read counts for age of diagnosis from 1A to 4. 
 
-```{r smoking-status-by-age, echo = FALSE}
+```{r count-by-age, echo = FALSE}
 final_table %>%
   filter(genename == "A1BG") %>% 
   group_by(age_at_diagnosis) %>%
@@ -157,7 +157,7 @@ final_table %>%
     geom_col(position = "dodge") +
     xlab("Age at Diagnosis") +
     ylab("Count") +
-    ggtitle("Relationship Between Age at Diagnosis and Smoking Status")
+    ggtitle("Distribution of Patients Across Age at Diagnosis")
 ```
 
 **Figure 5**: This figure shows the distribution of patients across the vector of age at diagnosis.  
@@ -193,6 +193,22 @@ final_table %>%
 
 **Figure 7**: This figure shows the relationship between stage of cancer and age at diagnosis, further separated by smoking status. 
 
+```{r count-by-smoking-status, echo = FALSE}
+final_table %>%
+  filter(genename == "A1BG") %>% 
+  group_by(smoking_status) %>%
+  tally() %>%
+  ggplot(aes(x = smoking_status,
+             y = n,
+             fill = smoking_status)) +
+    geom_col(position = "dodge") +
+    xlab("Smoking Status") +
+    ylab("Count") +
+    ggtitle("Distribution of Patients Across Smoking Status")
+```
+
+**Figure 8**: This figure shows the distribution of patients across the vector of smoking status.
+
 ```{r smoking-status-by-gender, echo = FALSE}
 # this code looks at the relationship between gender and smoking status
 final_table %>%
@@ -208,7 +224,7 @@ final_table %>%
     ggtitle("Relationship Between Gender and Smoking Status")
 ```
 
-**Figure 8**: Here we see the relationship between gender and smoking status.  
+**Figure 9**: Here we see the relationship between gender and smoking status.  
 
 ```{r make-boxplot-of-highly-expressed-genes, echo = FALSE}
 # here we just want to pull out the unique gene names and turn
@@ -240,7 +256,7 @@ final_table %>%
                          hjust = 1))
 ```
 
-**Figure 9**: This figure shows the relationship between scaled read counts per gene separated by cancer stage and further discriminated by gender.
+**Figure 10**: This figure shows the relationship between scaled read counts per gene separated by cancer stage and further discriminated by gender.
 
 ## Summary of Results
 The dataset is a table that has 3,434,400 points for 12 variables so it is a lot to be dealing with. Thus, our first step was to narrow down what we were looking out by separating the genes that were most highly expressed. Figure 1 is a table that details the top 15 most highly expressed genes along with which gender they were seen expressed in and their mean scaled read count arranged in descending order. The number one, most highly expressed gene is *EEF1A1*. 
@@ -253,11 +269,11 @@ The next thing we wanted to look at was the relationship between these mean read
   
 We then wanted to look at the relationship between scaled read counts and cancer stage, separated by age of diagnosis and further discriminated by gender (Figure 6). In the cancer stage 2B, there seems to be only males. 3A has the highest read counts of all the stages and these higher read counts are all male; also, there is a clear deliniation between genders with females falling between the ages of 50 and 60 (in terms of age of diagnosis) and men between 60 and 80. In 1A, 1B and 2A, there is more of a mixture and overlap in terms of age of diagnosis. 2A, 3B and 4 all fall beneath read counts of 2.5e+05. Most of the read counts fall below 5e+05. For those with read counts higher than 5e+05, almost all of them are males except for a few females which are seen in cancer stage 1B. Those whose cancer stage is unknown have the least variance in terms of age: they are all around the age of 60. 1A, 2A, 3A, 4 and NA show the trend that the youngest people in each of these cancer stages are females; 1B somewhat shows this but it shows some that are younger being males. Both 2B and 3B show the youngest groups being males although 2B is made up entirely of males. In 1B, 2A, 2B, 3A, 4, and NA, the oldest people are males; only in 1A are the oldest females.
   
-We were curious about the relationship between stage of cancer and age at diagnosis, further separated by smoking status (Figure 7). Here we see that anyone over 80 regardless of cancer stage is of the smoking status "previously." 3B only has people who have never smoked. 2B consists of "current" or "previously." Those who have never smoked are seen in each stage except for 2B from just below the age of 40 up to age 75. Those currently smoking are seen from 1A to 3A between the ages of just below 40 to just below 75. Those who have previously smoked are also seen in all age groups (and dominate the upper age groups) and are presented in each stage except 3B. Those whose smoking status is unknown are only seen in the unknown cancer stage and 3A between the ages of 60 and 70. It would seem that the overall concentration of lies within those who have either never smoked or previously smoked between the ages of 60 and 70.
+We were curious about the relationship between stage of cancer and age at diagnosis, further separated by smoking status (Figure 7). Here we see that anyone over 80 regardless of cancer stage is of the smoking status "previously." 3B only has people who have never smoked. 2B consists of "current" or "previously." Those who have never smoked are seen in each stage except for 2B from just below the age of 40 up to age 75. Those currently smoking are seen from 1A to 3A between the ages of just below 40 to just below 75. Those who have previously smoked are also seen in all age groups (and dominate the upper age groups) and are presented in each stage except 3B. Those whose smoking status is unknown are only seen in the unknown cancer stage and 3A between the ages of 60 and 70. It would seem that the overall concentration of lies within those who have either never smoked or previously smoked between the ages of 60 and 70. In order to look at the relative distribution of patients between smoking statuses, we look at Figure 8. Here we see that just below 40 have never smoked, just above 35 have smoked previously, just above 15 are currently smoking and just below 5 are unknown. 
   
-In accordance with the trend mentioned in the introduction of women who had never smoked developing lung cancer, we then looked ats the relationship between gender and smoking status (Figure 8). For unknown smoking status, only males are represented. For those who have previously smoked, almost all are male - just over 30 are male and about 2 or 3 are females. Around the same trend is seen for those who have never smoked but inversed; the majority is female with just over 30 being female and just under 10 being male. For those currently smoking, about 1 is female and 15 are male.
+In accordance with the trend mentioned in the introduction of women who had never smoked developing lung cancer, we then looked ats the relationship between gender and smoking status (Figure 9). For unknown smoking status, only males are represented. For those who have previously smoked, almost all are male - just over 30 are male and about 2 or 3 are females. Around the same trend is seen for those who have never smoked but inversed; the majority is female with just over 30 being female and just under 10 being male. For those currently smoking, about 1 is female and 15 are male.
   
-The last thing that we looked at was the relationship between scaled read counts per gene separated by cancer stage and further discriminated by gender (Figure 9). The data represented in this figure starts with the top 15 genes, from the final table, which were enumerated in Figure 1. From this table, we pulled the unique gene names and turned them into a vector which were used as our x axis values. For cancer stages of 2A, 3B, 4, and NA, you can see that very low with counts all falling beneath 250,000. 3A shows some increase with counts reaching up to 500,000. 2B and 4 seem to have boxplots that are only male; 2A has boxplots that are only female. 1A is the next increment for higher count with the highest count belonging to gene EEF1A1 at 750,000. There is also one discernable boxplot for gene SFTPB that is male. Both 1B and 2B have counts that are above 750,000: for 1B it is seen in SFTPB and for 2B it is seen in SFTPA2. Overall, 2B has more longer counts but 1B is the only one with the largest boxplots, seen in genes SFTPB, that are both male and female.
+The last thing that we looked at was the relationship between scaled read counts per gene separated by cancer stage and further discriminated by gender (Figure 10). The data represented in this figure starts with the top 15 genes, from the final table, which were enumerated in Figure 1. From this table, we pulled the unique gene names and turned them into a vector which were used as our x axis values. For cancer stages of 2A, 3B, 4, and NA, you can see that very low with counts all falling beneath 250,000. 3A shows some increase with counts reaching up to 500,000. 2B and 4 seem to have boxplots that are only male; 2A has boxplots that are only female. 1A is the next increment for higher count with the highest count belonging to gene EEF1A1 at 750,000. There is also one discernable boxplot for gene SFTPB that is male. Both 1B and 2B have counts that are above 750,000: for 1B it is seen in SFTPB and for 2B it is seen in SFTPA2. Overall, 2B has more longer counts but 1B is the only one with the largest boxplots, seen in genes SFTPB, that are both male and female.
 
 # Discussion
 
@@ -267,10 +283,12 @@ Smoking is the most prevalent risk factor for lung cancer, and the risk increase
 
 The highest expression of genes in both males and females was seen in the genes EEF1A1 and SFTPB (Figure 2). For both of these genes, perhaps they are responsible for altered expression in lung cancer development with the foremost influential one being EE1A1 followed by SFTPB. For FN1, FTH1, and FTL, their expression was solely expressed in men. which means that their influence in altered expression is only seen in men. There were 9 most highly expressed genes overall and for all of them except two, they had higher mean read counts in men than women. This raises the question as to why. Is this because men have a higher probability of developing lung cancer? Or perhaps this is because are simply historically and culturally the more prevalent sex to pick up the habit of smoking. Perhaps it is the timeless quandry of the chicken or the egg. 
 
-The continuation of our investigation takes us to calculating the mean and standard deviation of read count by cancer stage (Figure 3). The highest means are seen in both cancer stages 2B and 3A with the rest being signficantly smaller in their range. The holder of third place is 1B. This suggests that the genes with the highest rates of altered expression are seen in the greatest number (although this margin for means is small) in cancer stages 2B and 3A; their respective variations from this mean is largest in the two aforementioned cancer stages. Taking a look at Figure 9, we can see that this representation of the data makes sense. In 2B, we see large boxplots in comparison to the boxplots in the rest of the cancer stages with those for EEF1A1 and SFTPB having the largest boxplots. They are also wider because they are exclusively male. In 1B, you can see that for SFTPB the largest boxplot is female - again supporting that this gene has the greatest influence in altered expression in women. 
+The continuation of our investigation takes us to calculating the mean and standard deviation of read count by cancer stage (Figure 3). The highest means are seen in both cancer stages 2B and 3A with the rest being signficantly smaller in their range. The holder of third place is 1B. This suggests that the genes with the highest rates of altered expression are seen in the greatest number (although this margin for means is small) in cancer stages 2B and 3A; their respective variations from this mean is largest in the two aforementioned cancer stages. Taking a look at Figure 10, we can see that this representation of the data makes sense. In 2B, we see large boxplots in comparison to the boxplots in the rest of the cancer stages with those for EEF1A1 and SFTPB having the largest boxplots. They are also wider because they are exclusively male. In 1B, you can see that for SFTPB the largest boxplot is female - again supporting that this gene has the greatest influence in altered expression in women. 
 
 If we then look into how age factors into all of this, we see continued support for our previous findings. In Figure 6, we see that cancer stage 2B is completely male. 2B and 3A have the highest scaled read counts with 3A also being predominantly male. For almost all the stages, except for perhaps 3B and 1B do we see a male dominance. There is a concentration for age at diagnosis between the ages of 50 and 70. For more specificity and precision in terms of where the spikes are seen in terms of age at diagnosis, we look at Figure 4. Here we see that most of the means are the same but largest increases in mean read count are seen at the ages of 45, 69, 70 and 78 with the highest standard deviations seen in the ages of 45, 65 and 69. This seems to suggest that these ages have the higher altered expression and are therefore see a higher trend in development of lung cancer. If we looked into the distribution of patients across the vector of age at diagnosis (Figure 5), we see that the highest concentrations of patients were seen, in descending order, in the ages of 66, 62 and 58. The next highest concentration was held by the three ages that had all the same number of patients of 5: 65, 68, 73. This would seem to suggest that the 60s is the age range that sees the highest rate of lung cancer diagnoses. 
 
-The results shown in Figure 8 confirm what was suggested, as was mentioned in the introduction, by previous literature - that there is indeed a high count of women who have never smoked that develop lung cancer. Passive or indirect smoking may be one of the causal factors for lung cancer; it would explain the long-standing riddle of why many women (whose husbands were heavy smokers) develop lung cancer even though they themselves are non-smokers [@hirayama2000non]. It raises the question of whether or not these women, the non-smokers that developed lung cancer, had partners or husbands that smoked or were in some way had consistent exposure to secondhand smoke. The same goes for the non-smoking men who developed lung cancer but as there's a higher percentage of men that smoke than women, this trend for the female sex in terms of societal impacts (like gender roles) as potential causation factors of lung cancer development due to second-hand smoke is more relevant. 
+Now connecting age at diagosis, cancer stage, and smoking status, we turn to Figure 7. The trend that was established in Figures 4, 5 and 6 can be seen here in that the greatest concentration of patients were seen within the ages of 60 and 70. Here, you can also see that the smoking status of "never" is seen in every single cancer stage except 2B. The greatest number of non-smokers are seen in cancer stages 1A and 1B. Even though they have the greatest concentration in these early stages, non-smokers actually make up more than half of the patients that are seen in the later stages of 3B and 4. Those who have previously smoked are also present in every single stage (except 3B). We believe that the presence of these statuses in every stage except one each is a matter of sample size and that as the size of the study increased, the more evened out the trend would be of equal dispersal.  This dispersal of non-smokers and those that have previously smoked throughout all stages of cancer (except one) seems to suggest that to some extent the status of smoking does not matter. Granted, there are far more non-smokers with the beginning stages of lung cancer than any other stages but when looking at this data it is also important to consider the relative distribution between smoking status of the patients (Figure 8). Here we see that just below 40 have never smoked, just above 35 have smoked previously, just above 15 are currently smoking and just below 5 are unknown. Thus, of course we see more people that have smoked or have never smoked than those who are currently or those who are unknown. This leads us to question what kind of figure we would see if there was an equal distribution across all the smoking statuses. 
+
+The results shown in Figure 9 confirm what was suggested, as was mentioned in the introduction, by previous literature - that there is indeed a high count of women who have never smoked that develop lung cancer. Passive or indirect smoking may be one of the causal factors for lung cancer; it would explain the long-standing riddle of why many women (whose husbands were heavy smokers) develop lung cancer even though they themselves are non-smokers [@hirayama2000non]. It raises the question of whether or not these women, the non-smokers that developed lung cancer, had partners or husbands that smoked or were in some way had consistent exposure to secondhand smoke. The same goes for the non-smoking men who developed lung cancer but as there's a higher percentage of men that smoke than women, this trend for the female sex in terms of societal impacts (like gender roles) as potential causation factors of lung cancer development due to second-hand smoke is more relevant. 
 
 # Sources Cited
