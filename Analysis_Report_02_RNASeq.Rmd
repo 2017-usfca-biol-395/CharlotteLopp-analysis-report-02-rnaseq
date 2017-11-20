@@ -108,7 +108,8 @@ top_15 %>%
 **Figure 2**: Here we see mean read counts per gene by gender; its a visualization of the data presented in Figure 1.  
 
 ```{r mean-and-sd-of-read-count-by-cancer-stage, echo = FALSE}
-# this code looks at the mean and standard deviation of read count by cancer stage
+# this code looks at the mean and standard
+# deviation of read count by cancer stage
 final_table %>%
   group_by(cancer_stage) %>%
   summarize(mean_read_count = mean(counts_lengthscaledtpm),
@@ -148,7 +149,7 @@ final_table %>%
 
 ```{r count-by-age, echo = FALSE}
 final_table %>%
-  filter(genename == "A1BG") %>% 
+  filter(genename == "A1BG") %>%
   group_by(age_at_diagnosis) %>%
   tally() %>%
   ggplot(aes(x = age_at_diagnosis,
@@ -163,7 +164,8 @@ final_table %>%
 **Figure 5**: This figure shows the distribution of patients across the vector of age at diagnosis.  
 
 ```{r make-facet-grid-of-age-by-length, echo = FALSE}
-# this code looks at realtionship between cancer stage, read count, and age at diagnosis
+# this code looks at realtionship between cancer stage,
+# read count, and age at diagnosis
 final_table %>%
   ggplot(aes(x = age_at_diagnosis,
              y = counts_lengthscaledtpm)) +
@@ -180,14 +182,15 @@ final_table %>%
 **Figure 6**: Here we show the relationship between scaled read counts and cancer stage, separated by age of diagnosis and further discriminated by gender.   
 
 ```{r age-by-cancer-stage-by-smoking-status, echo = FALSE}
-# this code looks at the relationship among cancer stage, age of diagnosis and smoking status
+# this code looks at the relationship among cancer stage,
+# age of diagnosis and smoking status
 final_table %>%
   ggplot(aes(x = cancer_stage,
              y = age_at_diagnosis)) +
       geom_point(size = 1, aes(color = smoking_status)) +
       ylab("Age at Diagnosis") +
       xlab("Cancer Stage") +
-      ggtitle("The Relationship Between Age at Diagnosis and Cancer Stage by 
+      ggtitle("The Relationship Between Age at Diagnosis and Cancer Stage by
               Smoking Status")
 ```
 
@@ -195,7 +198,7 @@ final_table %>%
 
 ```{r count-by-smoking-status, echo = FALSE}
 final_table %>%
-  filter(genename == "A1BG") %>% 
+  filter(genename == "A1BG") %>%
   group_by(smoking_status) %>%
   tally() %>%
   ggplot(aes(x = smoking_status,
@@ -212,7 +215,7 @@ final_table %>%
 ```{r smoking-status-by-gender, echo = FALSE}
 # this code looks at the relationship between gender and smoking status
 final_table %>%
-  filter(genename == "A1BG") %>% 
+  filter(genename == "A1BG") %>%
   group_by(smoking_status, gender) %>%
   tally() %>%
   ggplot(aes(x = smoking_status,
